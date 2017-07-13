@@ -23,7 +23,7 @@ public class Dao {
         
         try {
             // db parameters
-            String url = "jdbc:sqlite:sqlite/notejam.db";
+            String url = "jdbc:sqlite:notejam.db";
             System.out.println(url);
             // create a connection to the database
             conn = DriverManager.getConnection(url);

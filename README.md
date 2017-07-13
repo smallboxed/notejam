@@ -1,2 +1,6 @@
 # notejam
-a really really really basic note taking api. 
+a really really really basic note taking api. (seriously...its super basic.)
+
+steps to run:
+initialize 
+
