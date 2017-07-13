@@ -35,7 +35,38 @@ public class Dao {
        
         return conn;
     }
-    
+    public String selectAllNotes(String search) {
+        String sql = "SELECT * FROM notes WHERE text LIKE ?";
+        ArrayList<HashMap<String, Object>> offlineList = new ArrayList<>();
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        Connection conn = this.connect();
+        try (
+        		PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        		pstmt.setString(1, "%" + search + "%");
+        		ResultSet rs = pstmt.executeQuery();
+        	
+            while (rs.next()) {
+            		HashMap<String, Object> map = new HashMap<>();
+	            	map.put("id", rs.getInt("id"));
+	            	map.put("body", rs.getString("text"));
+	            	offlineList.add(map);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+        		if(conn != null) {
+        			try {
+        				conn.close();
+        				conn = null;
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+        		}
+        }
+        return gson.toJson(offlineList);
+    }
     public String selectAllNotes(){
         String sql = "SELECT * FROM notes";
         ArrayList<HashMap<String, Object>> offlineList = new ArrayList<>();
