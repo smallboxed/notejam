@@ -8,7 +8,9 @@ steps to run:
 4) api location is localhost:8080/api/notes. 
 
 GET to api/notes will return all available notes.
+
 GET to api/notes?query={enter query here} will return a result set based on query.
+
 GET to api/notes/{id} will return only the note with that id.
 
 POST text string to api/notes will create a new note.
