@@ -41,8 +41,8 @@ public class Dao {
         ArrayList<HashMap<String, Object>> offlineList = new ArrayList<>();
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
-        
-        try (Connection conn = this.connect();
+        Connection conn = this.connect();
+        try (
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)){
         	
@@ -53,9 +53,17 @@ public class Dao {
 	            	offlineList.add(map);
             }
 
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        } finally {
+        		if(conn != null) {
+        			try {
+        				conn.close();
+        				conn = null;
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+        		}
         }
         return gson.toJson(offlineList);
     }
@@ -64,23 +72,30 @@ public class Dao {
         ArrayList<HashMap<String, Object>> offlineList = new ArrayList<>();
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
-        try (Connection conn = this.connect();
+        Connection conn = this.connect();
+        try (
         		PreparedStatement pstmt = conn.prepareStatement(sql)) {
         		pstmt.setInt(1, id);
         		ResultSet rs = pstmt.executeQuery();
         		
             while (rs.next()) {
             		HashMap<String, Object> map = new HashMap<>();
-            		System.out.println(rs.getInt("id"));
 	            	map.put("id", rs.getInt("id"));
 	            	map.put("body", rs.getString("text"));
 	            	offlineList.add(map);
             }
-
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }
+        } finally {
+    		if(conn != null) {
+    			try {
+    				conn.close();
+    				conn = null;
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+    		}
+    }
         return gson.toJson(offlineList);
     }
     public void createNote(String note) {
